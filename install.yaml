@@ -1,6 +1,7 @@
 name: laravelcloud
 
 project_files:
-  - docker-compose.laravelcloud.yaml
+  - providers/laravelcloud.yaml
+  - laravelcloud/db-backup-download
 
 ddev_version_constraint: '>= v1.24.10'

@@ -3,45 +3,33 @@
 [![last commit](https://img.shields.io/github/last-commit/weitzman/ddev-laravelcloud)](https://github.com/weitzman/ddev-laravelcloud/commits)
 [![release](https://img.shields.io/github/v/release/weitzman/ddev-laravelcloud)](https://github.com/weitzman/ddev-laravelcloud/releases/latest)
 
-# DDEV Laravelcloud
+# DDEV Laravel Cloud
 
-## Overview
+A [DDEV](https://ddev.com/) pull provider for Drupal sites hosted on [Laravel Cloud](https://cloud.laravel.com/). `ddev pull laravelcloud` downloads the database backup that the [laravelcloud](https://www.drupal.org/project/laravelcloud) module uploads on each deploy and imports it.
 
-This add-on integrates Laravelcloud into your [DDEV](https://ddev.com/) project.
+## Requirements
+
+- The `drupal/laravelcloud` module, installed with Composer, with its database backup configured (see "Database backup" in the module's README).
+- `DB_BACKUP_URL` in the web container, in the form `https://ACCESS_KEY_ID:SECRET_ACCESS_KEY@ENDPOINT_HOST/BUCKET_ID`. Use the bucket's read-only key. Set it in `.ddev/.env` (then `ddev restart`) or in the project's `.env`. Do not commit it.
 
 ## Installation
 
 ```bash
 ddev add-on get weitzman/ddev-laravelcloud
-ddev restart
 ```
 
-After installation, make sure to commit the `.ddev` directory to version control.
+Commit the `.ddev` directory afterwards. The add-on installs `.ddev/providers/laravelcloud.yaml` and `.ddev/laravelcloud/db-backup-download`.
 
 ## Usage
 
-| Command | Description |
-| ------- | ----------- |
-| `ddev describe` | View service status and used ports for Laravelcloud |
-| `ddev logs -s laravelcloud` | Check Laravelcloud logs |
-
-## Advanced Customization
-
-To change the Docker image:
-
 ```bash
-ddev dotenv set .ddev/.env.laravelcloud --laravelcloud-docker-image="ddev/ddev-utilities:latest"
-ddev add-on get weitzman/ddev-laravelcloud
-ddev restart
+ddev pull laravelcloud
 ```
 
-Make sure to commit the `.ddev/.env.laravelcloud` file to version control.
+## Notes
 
-All customization options (use with caution):
-
-| Variable | Flag | Default |
-| -------- | ---- | ------- |
-| `LARAVELCLOUD_DOCKER_IMAGE` | `--laravelcloud-docker-image` | `ddev/ddev-utilities:latest` |
+- The backup is not sanitized. Its cache, session and log tables are empty.
+- Files are not pulled. Use [stage_file_proxy](https://www.drupal.org/project/stage_file_proxy) instead.
 
 ## Credits
 

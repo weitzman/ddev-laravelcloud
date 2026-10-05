@@ -39,17 +39,19 @@ setup() {
 }
 
 health_checks() {
-  # Do something useful here that verifies the add-on
+  assert_file_exist .ddev/providers/laravelcloud.yaml
+  assert_file_exist .ddev/laravelcloud/db-backup-download
 
-  # You can check for specific information in headers:
-  # run curl -sfI https://${PROJNAME}.ddev.site
-  # assert_output --partial "HTTP/2 200"
-  # assert_output --partial "test_header"
+  # A real download needs a secret, so only check the failure without one.
+  run ddev pull laravelcloud -y
+  assert_failure
+  assert_output --partial "vendor/autoload.php not found"
 
-  # Or check if some command gives expected output:
-  DDEV_DEBUG=true run ddev launch
-  assert_success
-  assert_output --partial "FULLURL https://${PROJNAME}.ddev.site"
+  mkdir -p vendor
+  echo '<?php' > vendor/autoload.php
+  run ddev pull laravelcloud -y
+  assert_failure
+  assert_output --partial "DB_BACKUP_URL is not set"
 }
 
 teardown() {
