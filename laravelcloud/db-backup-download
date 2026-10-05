@@ -1,11 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+#ddev-generated
+
 /**
  * @file
  * Downloads the database backup that "dr lc:db-backup" uploads.
- *
- * #ddev-generated
  *
  * Usage: php .ddev/laravelcloud/db-backup-download [DESTINATION]
  *
